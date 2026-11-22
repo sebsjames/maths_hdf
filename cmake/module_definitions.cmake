@@ -5,7 +5,7 @@
 macro(setup_module_variables_for_maths_hdf base_directory maths_directory)
 
   include(${maths_directory}/cmake/module_definitions.cmake)
-  setup_module_variables_for_maths(maths_directory)
+  setup_module_variables_for_maths(${maths_directory})
   
   set(SM_HDFDATA_MODULES
     ${SM_VEC_MODULES}

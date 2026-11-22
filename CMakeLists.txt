@@ -79,9 +79,9 @@ endif(WIN32)
 
 # Lib finding
 
-# The HDF5 library is required only to use sm.hdfdata. To prefer the use of static linking
-# of HDF5, call set(HDF5_USE_STATIC_LIBRARIES ON)
-find_package(HDF5)
+# Naturally, the HDF5 library is required for these modules. To prefer
+# the use of static linking of HDF5, call set(HDF5_USE_STATIC_LIBRARIES ON)
+find_package(HDF5 REQUIRED)
 if(HDF5_FOUND)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${HDF5_DEFINITIONS}")
 endif()
