@@ -8,7 +8,7 @@ cmake_minimum_required(VERSION 3.28.5)
 # This value is ok for cmake versions from 3.31.11 up to 4.2.3 (Seb)
 # set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD "d0edc3af-4c50-42ea-a356-e2862fe7a444")
 
-project(maths_config LANGUAGES CXX)
+project(maths_hdf LANGUAGES CXX)
 
 message(STATUS "Install prefix: ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "  (This can be changed with `cmake -DCMAKE_INSTALL_PREFIX=/some/place`")
@@ -23,7 +23,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # property on all targets declared after this to 1
 # set(CMAKE_CXX_MODULE_STD 1)
 
-# Defines our C++ module code file lists (such as SM_VEC_MODULES)
+# Defines our C++ module code file lists
 include(${PROJECT_SOURCE_DIR}/cmake/module_definitions.cmake)
 
 # Add the host definition to CXXFLAGS along with other switches
@@ -79,8 +79,12 @@ endif(WIN32)
 
 # Lib finding
 
-# nlohmann::json module json.cppm is submoduled for use with sm::config
-include_directories("${PROJECT_SOURCE_DIR}/json/include")
+# The HDF5 library is required only to use sm.hdfdata. To prefer the use of static linking
+# of HDF5, call set(HDF5_USE_STATIC_LIBRARIES ON)
+find_package(HDF5)
+if(HDF5_FOUND)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${HDF5_DEFINITIONS}")
+endif()
 
 # A macro to make a list of modules into a unique list then add them to target_name
 function(target_sources_modules target_name)
@@ -95,9 +99,9 @@ endfunction()
 #
 # Module groups. see module_definitions.cmake
 #
-setup_module_variables_for_maths_config (${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/json ${PROJECT_SOURCE_DIR}/maths)
+setup_module_variables_for_maths_hdf (${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/maths)
 
-# The sm.config module is here
+# The hdf modules are here
 add_subdirectory(sm)
 
 # Unit testing using the ctest framework
